@@ -2,8 +2,22 @@ const express = require('express');
 const User = require("../models/user");
 const jwt = require('jsonwebtoken');
 const router = express.Router();
+const {check, validationResult} = require('express-validator');
 
-router.post("/register", async (req,res) =>{
+
+router.post("/register", [
+    check("firstname", "Vui lòng không để trống").isString(),
+    check("lastname", "Vui lòng không để trống").isString(),
+    check("email", "Vui lòng không để trống").isEmail(),
+    check ("password", "Mật khẩu phải chứa ít nhất 6 ký tự").isLength({
+        min: 6,
+    }),
+
+], async (req,res) =>{
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(400).json({message: errors.array()});
+    }
     try {
         let user = await User.findOne({
             email: req.body.email,
