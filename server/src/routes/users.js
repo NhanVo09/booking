@@ -24,7 +24,7 @@ router.post("/register", [
         });
 
         if(user) {
-            return res.status(400).json({message: "User already exits"});
+            return res.status(400).json({message: "Tài khoản đã tồn tại "});
 
         }
         user = new User(req.body)
@@ -42,7 +42,7 @@ router.post("/register", [
             secure: process.env.NODE_ENV === "production",
             maxAge: 86400000,
         })
-        return res.sendStatus(200);
+        return res.status(200).send({message: " Đăng ký thành công "});
     } catch (error) {
         console.log(error);
         res.status(500).send({message: "Something went wrong"});
